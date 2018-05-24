@@ -1,4 +1,4 @@
-CXX=g++
+CXX=clang++
 
 LDFLAGS=
 TARGET_BASE=bench
