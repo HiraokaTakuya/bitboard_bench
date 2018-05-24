@@ -15,7 +15,7 @@ CPPOBJECTS=${CPPSRCS:.cpp=.o}
 OPT=-Wall -std=c++11
 
 release:
-	$(MAKE) CPPFLAGS='$(OPT) -Ofast -DNDEBUG' LDFLAGS='$(LDFLAGS)' All
+	$(MAKE) CPPFLAGS='$(OPT) -Ofast -DNDEBUG -march=native' LDFLAGS='$(LDFLAGS)' All
 
 assert:
 	$(MAKE) CPPFLAGS='$(OPT) -Ofast' All

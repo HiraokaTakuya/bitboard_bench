@@ -2,7 +2,7 @@
 #include <chrono>
 #include <cstdint>
 
-enum Square : int8_t {};
+enum Square : int32_t {};
 
 struct Bitboard {
     uint64_t value(size_t i) const { return v[i]; }

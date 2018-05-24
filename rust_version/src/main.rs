@@ -1,4 +1,4 @@
-struct Square(i8);
+struct Square(i32);
 
 struct Bitboard {
     v: [u64; 2],
@@ -25,12 +25,12 @@ impl Bitboard {
         self.merge() != 0
     }
     fn pop_lsb_right_unchecked(&mut self) -> Square {
-        let sq = Square(self.value(0).trailing_zeros() as i8);
+        let sq = Square(self.value(0).trailing_zeros() as i32);
         self.v[0] &= self.v[0] - 1;
         sq
     }
     fn pop_lsb_left_unchecked(&mut self) -> Square {
-        let sq = Square((self.value(1).trailing_zeros() + 64) as i8);
+        let sq = Square(self.value(1).trailing_zeros() as i32 + 64);
         self.v[1] &= self.v[1] - 1;
         sq
     }
