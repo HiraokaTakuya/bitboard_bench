@@ -64,8 +64,10 @@ fn main() {
     let elapsed = (end.as_secs() * 1000) as i64 + end.subsec_millis() as i64;
     println!("u64 bench");
     println!("elapsed: {} [msec]", elapsed);
-    println!("times/s: {} [times/sec]", NUM_TRIALS * 1000 / elapsed);
-    println!("sum: {}", sum);
+    if elapsed != 0 {
+        println!("times/s: {} [times/sec]", NUM_TRIALS * 1000 / elapsed);
+        println!("sum: {}", sum);
+    }
 
     let mut sum: u64 = 0;
     let start = std::time::Instant::now();
