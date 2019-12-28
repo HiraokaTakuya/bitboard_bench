@@ -1,6 +1,6 @@
 #!/bin/bash
 
-(cd rust_version; RUSTFLAGS="-C target-cpu=native" cargo build --release)
+(cd rust_version; cargo build --release)
 (cd c++_version; make)
 sleep 2
 echo
