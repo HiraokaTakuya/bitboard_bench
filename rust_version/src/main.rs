@@ -49,29 +49,23 @@ impl Bitboard {
     }
 }
 
-fn main() {
-    const NUM_TRIALS: i64 = 30000000;
+#[inline(never)]
+fn task_u64(num_trials: usize) -> u64 {
     let mut sum: u64 = 0;
-    let start = std::time::Instant::now();
-    for _ in 0..NUM_TRIALS {
+    for _ in 0..num_trials {
         let mut all_one: u64 = 0xffff_ffff_ffff_ffff;
         while all_one != 0 {
             sum += all_one.trailing_zeros() as u64;
             all_one &= all_one - 1;
         }
     }
-    let end = start.elapsed();
-    let elapsed = (end.as_secs() * 1000) as i64 + end.subsec_millis() as i64;
-    println!("u64 bench");
-    println!("elapsed: {} [msec]", elapsed);
-    if elapsed != 0 {
-        println!("times/s: {} [times/sec]", NUM_TRIALS * 1000 / elapsed);
-        println!("sum: {}", sum);
-    }
+    sum
+}
 
+#[inline(never)]
+fn task_bitboard(num_trials: usize) -> u64 {
     let mut sum: u64 = 0;
-    let start = std::time::Instant::now();
-    for _ in 0..NUM_TRIALS {
+    for _ in 0..num_trials {
         let all_one = Bitboard::ALL;
         for sq in all_one {
             sum += sq.0 as u64;
@@ -82,6 +76,24 @@ fn main() {
         //    sum += sq.0 as u64;
         //}
     }
+    sum
+}
+
+fn main() {
+    const NUM_TRIALS: i64 = 30000000;
+    let start = std::time::Instant::now();
+    let sum = task_u64(NUM_TRIALS as usize);
+    let end = start.elapsed();
+    let elapsed = (end.as_secs() * 1000) as i64 + end.subsec_millis() as i64;
+    println!("u64 bench");
+    println!("elapsed: {} [msec]", elapsed);
+    if elapsed != 0 {
+        println!("times/s: {} [times/sec]", NUM_TRIALS * 1000 / elapsed);
+        println!("sum: {}", sum);
+    }
+
+    let start = std::time::Instant::now();
+    let sum = task_bitboard(NUM_TRIALS as usize);
     let end = start.elapsed();
     let elapsed = (end.as_secs() * 1000) as i64 + end.subsec_millis() as i64;
     println!("bitboard bench");

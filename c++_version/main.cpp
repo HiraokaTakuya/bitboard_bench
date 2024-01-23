@@ -29,17 +29,36 @@ struct Bitboard {
 
 const Bitboard ALL = {0x7fffffffffffffff, 0x7fffffffffffffff};
 
-int main() {
-    constexpr int64_t NUM_TRIALS = 30000000;
-    auto start = std::chrono::system_clock::now();
+__attribute__((noinline))
+uint64_t task_u64(const size_t num_trials) {
     uint64_t sum = 0;
-    for (int64_t i = 0; i < NUM_TRIALS; ++i) {
+    for (int64_t i = 0; i < num_trials; ++i) {
         auto allone = UINT64_C(0xffffffffffffffff);
         while (allone) {
             sum += __builtin_ctzll(allone);
             allone &= allone - 1;
         }
     }
+    return sum;
+}
+
+__attribute__((noinline))
+uint64_t task_bitboard(const size_t num_trials) {
+    uint64_t sum = 0;
+    for (int64_t i = 0; i < num_trials; ++i) {
+        Bitboard allone = ALL;
+        while (allone) {
+            auto sq = allone.pop_lsb_unchecked();
+            sum += (uint64_t)sq;
+        }
+    }
+    return sum;
+}
+
+int main() {
+    constexpr int64_t NUM_TRIALS = 30000000;
+    auto start = std::chrono::system_clock::now();
+    uint64_t sum = task_u64((size_t)NUM_TRIALS);
     auto end = std::chrono::system_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "u64 bench" << std::endl;
@@ -50,14 +69,7 @@ int main() {
     }
 
     start = std::chrono::system_clock::now();
-    sum = 0;
-    for (int64_t i = 0; i < NUM_TRIALS; ++i) {
-        Bitboard allone = ALL;
-        while (allone) {
-            auto sq = allone.pop_lsb_unchecked();
-            sum += (uint64_t)sq;
-        }
-    }
+    sum = task_bitboard((size_t)NUM_TRIALS);
     end = std::chrono::system_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "bitboard bench" << std::endl;
